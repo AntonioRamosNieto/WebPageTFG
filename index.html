@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TFG Antonio</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="jumbotron text-center">
+        Cliente MQTT
+    </h1>
+    <div class="row" style="margin-top: 70px;">
+        <h5>
+            <div id="basicArea">
+                <div class="well">Última medida:</div>
+            </div>
+        </h5>
+        <div id="divboton">
+            <button id="sendTC" class="btn btn-success">Enviar Telecomando</button>
+        </div>
+        <h6>
+            <div id="housekeepingArea">
+                <div class="well">
+                    <table  class="table" >
+                        <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Temperature</th>
+                            <th>Light</th>
+                        </tr>
+                        </thead>
+                        <tbody id="hktable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </h6>
+    </div>
+    <div style="position: absolute; bottom: 5px;">
+        <h4 class="jumbotron">
+            Autor: Antonio Ramos Nieto
+        </h4>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script>
+    jQuery(document).ready(function () {
+        var socket = io.connect();
+        var basicArea = jQuery('#basicArea');
+        var botonSendTC = jQuery('#sendTC');
+        var hktable = jQuery('#hktable');
+        botonSendTC.click(() => {
+            socket.emit('sending message', "TC");
+        });
+        socket.on('new message', function (data) {
+            var splitedData = data.message.split(",");
+            if (data.message.match(/^basic/)) {
+                basicArea.html('<div class="well">' + "Última medida- Timestamp: " + splitedData[1] + "    Temperature: "+ splitedData[2] + "    Light: "+ splitedData[3]+'</div>');
+            } else if (data.message.match(/^housekeeping/)) {
+                hktable.prepend('<tr><th>'+splitedData[1]+'</th><th>'+splitedData[2]+'</th><th>'+splitedData[3]+'</th> </tr>');
+            } else if (!data.message) {
+            } else {
+            }
+        });
+    });
+</script>
+</body>
