@@ -10,21 +10,22 @@
 <body>
 <div class="container">
     <h1 class="jumbotron text-center">
-        Cliente MQTT
+        MQTT Client
     </h1>
     <div class="row" style="margin-top: 70px;">
         <h5>
-            <div id="basicArea">
-                <div class="well">Última medida:</div>
+            <div id="basicArea" class="text-center">
+                <div class="well"><b>Last measurement - Timestamp: </b>----------<b> Temperature: </b> ------ <b>Light: </b>------</div>
             </div>
         </h5>
         <div id="divboton">
-            <button id="sendTC" class="btn btn-success">Enviar Telecomando</button>
+            <button id="sendTC" class="btn btn-success">Send Telecommand</button>
         </div>
         <h6>
             <div id="housekeepingArea">
                 <div class="well">
-                    <table  class="table" >
+                    <h4 class="text-center">Housekeeping messages</h4>
+                    <table  class="table table-striped" >
                         <thead>
                         <tr>
                             <th>Timestamp</th>
@@ -41,7 +42,7 @@
     </div>
     <div style="position: absolute; bottom: 5px;">
         <h4 class="jumbotron">
-            Autor: Antonio Ramos Nieto
+            Author: Antonio Ramos Nieto
         </h4>
     </div>
 </div>
@@ -59,7 +60,7 @@
         socket.on('new message', function (data) {
             var splitedData = data.message.split(",");
             if (data.message.match(/^basic/)) {
-                basicArea.html('<div class="well">' + "Última medida- Timestamp: " + splitedData[1] + "    Temperature: "+ splitedData[2] + "    Light: "+ splitedData[3]+'</div>');
+                basicArea.html('<div class="well">' + "<b>Last measurement - Timestamp: </b>" + splitedData[1] + "<b> Temperature: </b>"+ splitedData[2] + " <b>Light: </b>"+ splitedData[3]+'</div>');
             } else if (data.message.match(/^housekeeping/)) {
                 hktable.prepend('<tr><th>'+splitedData[1]+'</th><th>'+splitedData[2]+'</th><th>'+splitedData[3]+'</th> </tr>');
             } else if (!data.message) {

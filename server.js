@@ -12,7 +12,7 @@ server.listen(PORT);
 console.log('Server is running');
 
 const options = {
-    port: 15484,
+    port: 25484,
     clientId: 'SERVER'+ Math.random().toString(16).substr(2, 8),
     username: 'cunjkfki',
     password: 'NiROE_oOt3ZF',
@@ -24,7 +24,7 @@ const options = {
     encoding: 'utf8'
 };
 
-const MQTTclient = mqtt.connect('mqtt://m24.cloudmqtt.com',options);
+const MQTTclient = mqtt.connect('mqtts://m24.cloudmqtt.com',options);
 
 MQTTclient.on('connect', function () {
     console.log("conectado");
