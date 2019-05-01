@@ -98,10 +98,9 @@ Author: Antonio Ramos Nieto
         var basicArea = jQuery('#basicArea');
         var botonSendTC = jQuery('#sendTC');
         var hktable = jQuery('#hktable');
-        botonSendTC.click(() = > {
+        botonSendTC.click(() => {
             socket.emit('sending message', "tc");
-    })
-        ;
+    });
         socket.on('new message', function (data) {
             var splitedData = data.message.split(",");
             if (data.message.match(/^basic/)) {

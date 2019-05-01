@@ -67,7 +67,7 @@ MQTTclient.on('connect', function () {
     console.log("conectado");
     MQTTclient.subscribe('basic', function (err) {});
     MQTTclient.subscribe('housekeeping', function (err) {});
-})
+});
 /*
 @brief It connects to the MQTT broker and subscribe to the topics 'basic' and 'housekeeping'.
  */
@@ -84,7 +84,7 @@ MQTTclient.on('message', function (topic, message) {
         io.sockets.emit('new message', {message: mes});
         console.log(mes);
     }
-})
+});
 /*
 @brief The data received form the MQTT subscriber are send to the web client on port 5000.
  */
