@@ -39,7 +39,20 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 const mqtt = require('mqtt');
+const mysql = require('mysql');
 
+const mySqlCon = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "root",
+    database: "obdh"
+});
+
+
+mySqlCon.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected to database");
+});
 
 const PORT =  5000;
 
@@ -64,7 +77,7 @@ const MQTTclient = mqtt.connect('mqtts://acrux.dit.upm.es',options);
 const connections = [];
 
 MQTTclient.on('connect', function () {
-    console.log("conectado");
+    console.log("Connected to mqtt broker");
     MQTTclient.subscribe('basic', function (err) {});
     MQTTclient.subscribe('housekeeping', function (err) {});
 });
@@ -76,6 +89,15 @@ MQTTclient.on('message', function (topic, message) {
     // message is Buffer
     let mes;
     if (topic.toString() == "basic"){
+
+        const tm = { temperature: message.toString().split(",")[1], light: message.toString().split(",")[2] };
+
+        mySqlCon.query('INSERT INTO tm SET ?', tm, (err, res) => {
+            if(err) throw err;
+
+            console.log('Last insert ID:', res.insertId);
+        });
+
         mes =  "basic," + message.toString();
         io.sockets.emit('new message', {message: mes});
         console.log(mes);
